@@ -69,4 +69,36 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Increase stock item quantity by 1
+router.patch('/:id/increase', async (req, res) => {
+    try {
+        const stockItem = await Stock.findByPk(req.params.id);
+        if (stockItem) {
+            stockItem.Cantidad += 1;
+            await stockItem.save();
+            res.json(stockItem);
+        } else {
+            res.status(404).json({ error: 'Stock item not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Decrease stock item quantity by 1
+router.patch('/:id/decrease', async (req, res) => {
+    try {
+        const stockItem = await Stock.findByPk(req.params.id);
+        if (stockItem) {
+            stockItem.Cantidad -= 1;
+            await stockItem.save();
+            res.json(stockItem);
+        } else {
+            res.status(404).json({ error: 'Stock item not found' });
+        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 module.exports = router;
