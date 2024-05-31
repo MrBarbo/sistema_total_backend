@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Stock = require('../database/models/stock');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
 
 // Get all stock items
 router.get('/', async (req, res) => {
@@ -29,10 +31,16 @@ router.get('/:id', async (req, res) => {
 // Create a new stock item
 router.post('/', async (req, res) => {
     try {
-        const newStockItem = await Stock.create(req.body);
+        const newStockItem = await Stock.create({
+            Producto: req.body.Producto,
+            Droga: req.body.Droga,
+            Accion: req.body.Accion,
+            Cantidad: req.body.Cantidad,
+            Vencimiento: req.body.Vencimiento,
+        });
         res.status(201).json(newStockItem);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error });
     }
 });
 
@@ -98,6 +106,46 @@ router.patch('/:id/decrease', async (req, res) => {
         }
     } catch (error) {
         res.status(400).json({ error: error.message });
+    }
+});
+
+// Generate and download a PDF with stock information
+router.get('/download/pdf', async (req, res) => {
+    try {
+        console.log('ha entrado')
+        // Fetch stock items from the database
+        const stockItems = await Stock.findAll();
+
+        // Create a new PDF document
+        const doc = new PDFDocument();
+        const filename = 'Reporte_Stock.pdf';
+        const filePath = `${__dirname}/../../public/${filename}`; // Adjust the path as needed
+
+        // Pipe the PDF output to a file
+        doc.pipe(fs.createWriteStream(filePath));
+
+        // Write stock information to the PDF
+        doc.fontSize(18).text('Stock Report', { align: 'center' }).moveDown();
+        stockItems.forEach(item => {
+            doc.fontSize(14).text(`Product: ${item.Producto}`);
+            doc.fontSize(12).text(`Drug: ${item.Droga}`);
+            doc.fontSize(12).text(`Action: ${item.Accion}`);
+            doc.fontSize(12).text(`Quantity: ${item.Cantidad}`);
+            doc.fontSize(12).text(`Expiry Date: ${item.Vencimiento}`);
+            doc.moveDown();
+        });
+
+        // Finalize the PDF and close the stream
+        doc.end();
+
+        // Send the PDF file as a response
+        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+        res.setHeader('Content-type', 'application/pdf');
+        const filestream = fs.createReadStream(filePath);
+        filestream.pipe(res);
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

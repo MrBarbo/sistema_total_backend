@@ -10,10 +10,6 @@ Stock.init({
             notNull: {
                 msg: "Producto cannot be null"
             },
-            isAlphanumeric: {
-                args: true,
-                msg: "Producto may only contain letters and numbers"
-            },
             len: {
                 args: [1, 50],
                 msg: "Producto must be between 1 and 50 characters"
@@ -28,10 +24,6 @@ Stock.init({
             notNull: {
                 msg: "Droga cannot be null"
             },
-            isAlphanumeric: {
-                args: true,
-                msg: "Droga may only contain letters and numbers"
-            },
             len: {
                 args: [1, 50],
                 msg: "Droga must be between 1 and 50 characters"
@@ -45,10 +37,6 @@ Stock.init({
         validate: {
             notNull: {
                 msg: "Accion cannot be null"
-            },
-            isAlphanumeric: {
-                args: true,
-                msg: "Accion may only contain letters and numbers"
             },
             len: {
                 args: [1, 50],
@@ -69,7 +57,7 @@ Stock.init({
                 msg: "Cantidad must be an integer"
             },
             min: {
-                args: 0,
+                args: -1,
                 msg: "Cantidad must be 0 or a positive integer"
             }
         }
