@@ -2,31 +2,42 @@
 const express = require('express');
 const router = express.Router();
 const Consultas = require('../database/models/consultas');
+const Medication = require('../database/models/medicacionesrec')
 
-// Crear una nueva consulta
+// Create a new consultation with associated medications
 router.post('/', async (req, res) => {
+  const { patientName, date, pathology, company, medications } = req.body;
   try {
-    data= {
-      patientName: req.body.patientName,
-      date: req.body.date,
-      pathology: req.body.pathology,
-      observations: req.body.observations,
-      medicationName: req.body.medicationName,
-      drug: req.body.drug,
-      action: req.body.action,
-      quantity: req.body.quantity
-    }
-    const newConsulta = await Consultas.create(data);
-    res.status(201).json(newConsulta);
+      const newConsulta = await Consultas.create({
+          patientName,
+          date,
+          pathology,
+          company
+      });
+
+      // Create associated medications
+      if (medications && medications.length > 0) {
+          const medicationPromises = medications.map(medication => Medication.create({
+              consultaId: newConsulta.id, // Foreign key
+              medicationName: medication.medicationName,
+              drug: medication.drug,
+              quantity: medication.quantity
+          }));
+          await Promise.all(medicationPromises);
+      }
+
+      res.status(201).json(newConsulta);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+      res.status(400).json({ error:error.message });
   }
 });
 
-// Obtener todas las consultas
+// Obtener todas las consultas con sus recetas asociadas
 router.get('/', async (req, res) => {
   try {
-    const consultas = await Consultas.findAll();
+    const consultas = await Consultas.findAll({
+      include: Medication // Include associated Recetas
+    });
     res.json(consultas);
   } catch (error) {
     res.status(500).json({ error: error.message });

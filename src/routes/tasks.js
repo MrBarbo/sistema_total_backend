@@ -30,13 +30,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const newTask = await Task.create({
-            Acciones: req.body.actions,
-            Tarea: req.body.name,
-            Descripcion: req.body.description,
-            Responsable: req.body.responsible,
-            FechaDeInicio: req.body.startDate,
-            FechaDeFin: req.body.endDate,
-            Estatus: req.body.status
+            Tarea: req.body.Tarea,
+            Descripcion: req.body.Descripcion,
+            Responsable: req.body.Responsable,
+            FechaDeInicio: req.body.FechaDeInicio,
+            FechaDeFin: req.body.FechaDeFin,
+            Estatus: req.body.Estatus
         });
         res.status(201).json(newTask);
     } catch (error) {

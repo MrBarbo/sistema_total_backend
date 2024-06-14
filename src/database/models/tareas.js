@@ -3,9 +3,6 @@ const sequelize = require('../db');
 
 class Task extends Model {}
 Task.init({
-    Acciones: {
-        type: DataTypes.STRING,
-    },
 
     Tarea: {
         type: DataTypes.STRING,

@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../db');
+const Medication = require('./medicacionesrec');
 
 class Consultas extends Model {}
 
@@ -16,29 +17,25 @@ Consultas.init({
         type: DataTypes.STRING,
         allowNull: false
     },
-    observations: {
+    company: {
         type: DataTypes.TEXT,
         allowNull: true
-    },
-    medicationName: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    drug: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    action: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false
     }
 }, {
     sequelize,
     modelName: 'Consultas'
+});
+
+// Define associations
+Consultas.hasMany(Medication, {
+    foreignKey: 'consultaId',
+    onDelete: 'CASCADE'
+});
+
+// Define associations
+Medication.belongsTo(Consultas, {
+    foreignKey: 'consultaId',
+    onDelete: 'CASCADE'
 });
 
 module.exports = Consultas;

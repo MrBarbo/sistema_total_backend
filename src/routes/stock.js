@@ -112,7 +112,7 @@ router.patch('/:id/decrease', async (req, res) => {
 // Generate and download a PDF with stock information
 router.get('/download/pdf', async (req, res) => {
     try {
-        console.log('ha entrado')
+
         // Fetch stock items from the database
         const stockItems = await Stock.findAll();
 
@@ -125,7 +125,7 @@ router.get('/download/pdf', async (req, res) => {
         doc.pipe(fs.createWriteStream(filePath));
 
         // Write stock information to the PDF
-        doc.fontSize(18).text('Stock Report', { align: 'center' }).moveDown();
+        doc.fontSize(18).text('Reporte de Stock', { align: 'center' }).moveDown();
         stockItems.forEach(item => {
             doc.fontSize(14).text(`Product: ${item.Producto}`);
             doc.fontSize(12).text(`Drug: ${item.Droga}`);
