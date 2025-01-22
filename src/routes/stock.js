@@ -37,6 +37,7 @@ router.post('/', async (req, res) => {
             Accion: req.body.Accion,
             Cantidad: req.body.Cantidad,
             Vencimiento: req.body.Vencimiento,
+            Sede: req.body.Sede
         });
         res.status(201).json(newStockItem);
     } catch (error) {

@@ -32,6 +32,11 @@ Task.init({
     Estatus: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+
+    Sede: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 }, {
     sequelize,

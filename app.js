@@ -11,7 +11,7 @@ const Medication = require('./src/database/models/medicacionesrec')
 const Catering = require('./src/database/models/catering')
 const Permanencia = require('./src/database/models/permanencia')
 const Dereva = require('./src/database/models/dereva')
-
+const Empresas = require('./src/database/models/empresas')
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());

@@ -75,6 +75,20 @@ Stock.init({
                 msg: "Vencimiento must be a valid date"
             }
         }
+    },
+
+    Sede: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: {
+                msg: "Sede cannot be null"
+            },
+            len: {
+                args: [1, 50],
+                msg: "Sede must be between 1 and 50 characters"
+            }
+        }
     }
 }, {
     sequelize,

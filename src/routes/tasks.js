@@ -26,6 +26,22 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Get a single task by sede
+router.get('/sede/:id', async (req, res) => {
+    try {
+        const task = await Task.findAll({
+            where: {Sede : req.body.Sede}
+        })
+        if (task) {
+            res.json(task);
+        } else {
+            res.status(404).json({ error: 'Task not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Create a new task
 router.post('/', async (req, res) => {
     try {
@@ -35,7 +51,8 @@ router.post('/', async (req, res) => {
             Responsable: req.body.Responsable,
             FechaDeInicio: req.body.FechaDeInicio,
             FechaDeFin: req.body.FechaDeFin,
-            Estatus: req.body.Estatus
+            Estatus: req.body.Estatus,
+            Sede: req.body.Sede
         });
         res.status(201).json(newTask);
     } catch (error) {
